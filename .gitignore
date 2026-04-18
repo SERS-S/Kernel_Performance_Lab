@@ -1,3 +1,5 @@
 KPL_roadmap.md
 build/
 test.cpp
+out/
+.vscode

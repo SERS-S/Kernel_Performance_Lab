@@ -1,0 +1,5 @@
+### Run ###
+cmake -S . -B build && cmake --build build && ./build/bin/kpl test.cpp
+
+### Debug ###
+cmake --preset kpl-debug && cmake --build --preset kpl-debug

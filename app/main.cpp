@@ -22,7 +22,7 @@ std::filesystem::path resolve_path(const char *path)
     }
 
     const auto ext = source_path.extension().string();
-    if (ext != ".c" && ext != ".cpp")
+    if (ext != ".c" && ext != ".cpp" && ext != ".cc" && ext != ".cxx")
     {
         throw std::invalid_argument("Path is not a C/C++ source file");
     }
@@ -44,6 +44,7 @@ int main(int argc, char** argv)
         const char* path = argv[1];
         const auto source_path = resolve_path(path);
         std::cout << "Source file: " << source_path << std::endl;
+
 
 
     }
