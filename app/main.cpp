@@ -1,6 +1,7 @@
 #include <iostream>
 #include <stdexcept>
 #include <filesystem>
+#include "run_service.hpp"
 
 std::filesystem::path resolve_path(const char *path)
 {
@@ -44,6 +45,16 @@ int main(int argc, char** argv)
         const char* path = argv[1];
         const auto source_path = resolve_path(path);
         std::cout << "Source file: " << source_path << std::endl;
+
+        kpl::RunService service(std::filesystem::current_path());
+
+        auto run_id = service.start_run(source_path);
+
+        std::cout << "Run started: " << run_id << std::endl;
+
+        auto result = service.get_run(run_id);
+
+        std::cout << "Run result:\n" << result << std::endl;
 
 
 
