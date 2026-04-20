@@ -13,10 +13,7 @@ namespace kpl
         return std::to_string(now);
     }
 
-    RunService::RunService(fs::path source_path)
-        : source_path_(std::move(source_path))
-    {
-    }
+    RunService::RunService(fs::path source_path) : source_path_(std::move(source_path)) {}
 
     std::string RunService::start_run(const fs::path &source_path)
     {
@@ -26,11 +23,13 @@ namespace kpl
         fs::create_directories(run_dir);
 
         std::ofstream out(run_dir / "result.json");
-out << R"({
-"run_id": ")" << run_id << R"(",
-"status": "success",
-"source": ")" << source_path.string() << R"("
-})";
+
+        out << R"({
+        "run_id": ")" << run_id << R"(",
+        "status": "success",
+        "source": ")" << source_path.string() << R"("
+        })";
+
         out.close();
 
         return run_id;
@@ -45,17 +44,24 @@ out << R"({
 
         std::ifstream in(path);
         return std::string(
-            (std::istreambuf_iterator<char>(in)),
-            std::istreambuf_iterator<char>());
+            std::istreambuf_iterator<char>(in), 
+            std::istreambuf_iterator<char>()
+        );
     }
 
     std::string RunService::list_runs() const
     {
+        const auto runs_dir = source_path_ / "runs";
+        if (!fs::exists(runs_dir))
+        {
+            fs::create_directories(runs_dir);
+        }
+
         std::string json = "[";
 
         bool first = true;
 
-        for (auto &entry : fs::directory_iterator(source_path_ / "runs"))
+        for (auto &entry : fs::directory_iterator(runs_dir))
         {
             if (!entry.is_directory())
                 continue;
