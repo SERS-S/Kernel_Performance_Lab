@@ -82,6 +82,8 @@ if(KPL_BUILD_RUST_FRONTEND)
     set(KPL_RUST_TARGET_DIR "${CMAKE_BINARY_DIR}/cargo")
     set(KPL_RUST_FRONTEND_DIR "${PROJECT_SOURCE_DIR}/frontend")
 
+
+
     add_custom_target(kpl_frontend_rust ALL
         COMMAND
             "${CMAKE_COMMAND}" -E env
@@ -91,6 +93,9 @@ if(KPL_BUILD_RUST_FRONTEND)
         COMMENT "Building Rust frontend library"
         VERBATIM
     )
+    set(RUST_LIB "${KPL_RUST_TARGET_DIR}/${KPL_RUST_PROFILE}/libkpl_frontend.a")
+    target_link_libraries(kpl PRIVATE "${RUST_LIB}")
+    target_link_libraries(kpl PRIVATE dl pthread m)
 
     add_dependencies(kpl kpl_frontend_rust)
 endif()

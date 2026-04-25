@@ -1,4 +1,5 @@
 #include "../core/include/run_service.hpp"
+#include "../ffi/kpl_backend_api.h"
 #include <filesystem>
 #include <iostream>
 #include <stdexcept>
@@ -39,6 +40,13 @@ int main(int argc, char **argv) {
     std::cout << "Source file: " << source_path << std::endl;
 
     kpl::RunService service(std::filesystem::current_path());
+    KplBackendApi api;
+
+    api.ctx = &service;
+
+    api.run_start = c_run_start;
+    api.run_list = c_run_list;
+    api.string_free = c_string_free;
 
     auto run_id = service.start_run(source_path);
 
@@ -47,6 +55,7 @@ int main(int argc, char **argv) {
     auto result = service.get_run(run_id);
 
     std::cout << "Run result:\n" << result << std::endl;
+    return kpl_frontend_run(&api);
 
   } catch (const std::exception &ex) {
     std::cerr << "Error: " << ex.what() << std::endl;
